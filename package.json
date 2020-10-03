@@ -1,22 +1,62 @@
 {
-  "name": "electron-quick-start",
+  "name": "planckbot",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
-  "main": "main.js",
+  "description": "Advance social media bot by planck studio",
+  "main": "src/main",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "package-mac": "npm install --save && electron-packager . --overwrite --platform=darwin --arch=x64 --icon=src/assets/img/mac/icon.icns --prune=true --out=release-builds",
+    "package-win": "npm install --save && electron-packager . planckbot --overwrite --asar=false --platform=win32 --arch=x64 --icon=src/assets/img/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=\"Planck Studio\" --version-string.FileDescription=\"Advance social media bot by planck studio\" --version-string.ProductName=\"pbot\"",
+    "package-linux": "npm install --save && electron-packager . planckbot --overwrite --asar=true --platform=linux --arch=x64 --icon=src/assets/img/icon.png --prune=true --out=release-builds",
+    "setup-win": "electron-installer-windows --src dist/app-win32-x64/ --dest dist/installers/",
+    "build-win": "electron-packager . planckbot --overwrite --platform win32 --arch x64 --out dist/"
   },
-  "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "bot",
+    "planckbot",
+    "automation",
+    "socialmedia",
+    "planckstudio"
   ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "author": "Planck Studio <author@planckstudio.in>",
+  "build": {
+    "appId": "in.planckstudio.bot",
+    "category": "in.planckstudio.bot",
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "win": {
+      "target": "squirrel",
+      "icon": "src/assets/img/win/icon.ico"
+    }
+  },
+  "dependencies": {
+    "crypto-js": "^4.0.0",
+    "selenium-webdriver": "^4.0.0-alpha.7",
+    "chromedriver": "^85.0.1"
+  },
   "devDependencies": {
-    "electron": "^10.1.3"
+    "electron": "^10.1.3",
+    "electron-installer-windows": "^3.0.0",
+    "electron-packager": "^15.1.0",
+    "electron-prebuilt": "^1.4.13",
+    "electron-wix-msi": "^3.0.4"
   }
 }
