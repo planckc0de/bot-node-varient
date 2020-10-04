@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="description" content="An advance social media automation bot developed by planck studio">
+    <meta name="keywords" content="Bot, instagram bot, automation, planck studio">
+    <meta name="author" content="Planck Studio <author@planckstudio.in>">
+
+    <link rel="icon" href="assets/img/icon.png" type="image/x-icon">
+    <link href="assets/css/style.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/bootstrap-progressbar-3.3.4.min.css">
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/css/vivify.min.css">
+    <link rel="stylesheet" href="assets/css/chartist.min.css">
+    <link rel="stylesheet" href="assets/css/chartist-plugin-tooltip.css">
+    <link rel="stylesheet" href="assets/css/c3.min.css" />
+    <link rel="stylesheet" href="assets/css/sweetalert.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/toastr.min.css">
+    <link rel="stylesheet" href="assets/css/site.min.css">
+
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="./app.js"></script>
+
+    <title>Login - Planck Bot</title>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/7.22.0/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.22.0/firebase-analytics.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        var firebaseConfig = {
+            apiKey: "AIzaSyDjaxS0rOBVlbVD92WVY2Prdlpd4ZdCOSs",
+            authDomain: "planckbot.firebaseapp.com",
+            databaseURL: "https://planckbot.firebaseio.com",
+            projectId: "planckbot",
+            storageBucket: "planckbot.appspot.com",
+            messagingSenderId: "1097760128397",
+            appId: "1:1097760128397:web:16879c0af74596f63ad1c4",
+            measurementId: "G-4LFCH6HW13"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+    </script>
+
+</head>
+
+<body>
+
+    <div class="auth-main particles_js">
+        <div class="auth_div vivify popIn">
+            <div class="auth_brand">
+                <a class="navbar-brand" href="javascript:void(0);"><img src="assets/img/ic.png" width="30" height="30"
+                        class="d-inline-block align-top mr-2" alt="">Bot</a>
+            </div>
+            <div class="card">
+                <div class="body">
+                    <p class="lead">Login to your account</p>
+                    <form class="form-auth-small m-t-20" id="login" name="login" method="post">
+                        <div class="form-group">
+                            <label for="signin-user" class="control-label sr-only">Username</label>
+                            <input type="text" class="form-control round" id="signin-user" value=""
+                                placeholder="Username" name="auth_user">
+                        </div>
+                        <div class="form-group">
+                            <label for="signin-password" class="control-label sr-only">Password</label>
+                            <input type="password" class="form-control round" id="signin-password" value=""
+                                placeholder="Password" name="auth_pass">
+                        </div>
+                        <input type="hidden" value="login" name="request" />
+                        <div class="btn btn-primary btn-round btn-block" name="login_btn" id="login-btn">LOGIN</div>
+                        <div class="bottom">
+                            <!-- <span class="helper-text m-b-10"><i class="fa fa-lock"></i> <a href="page-forgot-password.html">Forgot password?</a></span> -->
+                            <span>Don't have a planck account? <a href="./register.html">Register</a></span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div id="particles-js"></div>
+    </div>
+    <script src="assets/js/libscripts.bundle.js"></script>
+    <script src="assets/js/vendorscripts.bundle.js"></script>
+    <script src="assets/js/mainscripts.bundle.js"></script>
+    <script src="assets/js/c3.bundle.js"></script>
+    <script src="assets/js/chartist.bundle.js"></script>
+    <script src="assets/js/knob.bundle.js"></script>
+    <script src="assets/js/sweetalert.min.js"></script>
+    <script src="assets/js/dialogs.js"></script>
+</body>
+
+</html>

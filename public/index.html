@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="description" content="An advance social media automation bot developed by planck studio">
+    <meta name="keywords" content="Bot, instagram bot, automation, planck studio">
+    <meta name="author" content="Planck Studio <author@planckstudio.in>">
+    <link rel="icon" href="assets/img/icon.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/bootstrap-progressbar-3.3.4.min.css">
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/css/vivify.min.css">
+    <link rel="stylesheet" href="assets/css/chartist.min.css">
+    <link rel="stylesheet" href="assets/css/chartist-plugin-tooltip.css">
+    <link rel="stylesheet" href="assets/css/c3.min.css" />
+    <link rel="stylesheet" href="assets/css/sweetalert.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/toastr.min.css">
+    <link rel="stylesheet" href="assets/css/site.min.css">
+
+    <script src="./app.js"></script>
+    <script src="./index.js"></script>
+
+    <title>Planck Bot</title>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/7.22.0/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.22.0/firebase-analytics.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        var firebaseConfig = {
+            apiKey: "AIzaSyDjaxS0rOBVlbVD92WVY2Prdlpd4ZdCOSs",
+            authDomain: "planckbot.firebaseapp.com",
+            databaseURL: "https://planckbot.firebaseio.com",
+            projectId: "planckbot",
+            storageBucket: "planckbot.appspot.com",
+            messagingSenderId: "1097760128397",
+            appId: "1:1097760128397:web:16879c0af74596f63ad1c4",
+            measurementId: "G-4LFCH6HW13"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+    </script>
+</head>
+
+<body class="theme-indigo font-montserrat">
+
+    <!-- Navbar -->
+    <div id="wrapper">
+        <nav class="navbar top-navbar">
+            <div class="container-fluid">
+                <div class="navbar-left">
+                    <div class="navbar-btn">
+                        <a href="index.html"><img src="./assets/img/ic.png" alt="Bot Logo" class="img-fluid logo"></a>
+                        <button type="button" class="btn-toggle-offcanvas"><i
+                                class="lnr lnr-menu fa fa-bars"></i></button>
+                    </div>
+
+                    <ul class="nav navbar-nav">
+
+                        <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown">
+                                <i class="icon-bell"></i>
+                                <span class="notification-dot bg-azura">5</span>
+                            </a>
+
+                            <ul class="dropdown-menu feeds_widget vivify fadeIn">
+                                <li class="header blue">Last 5 Notifications</li>
+
+                                <!-- <?php // $render->renderNotification(); ?> -->
+
+                            </ul>
+
+                        </li>
+
+                        <li><a href="javascript:void(0);" class="megamenu_toggle icon-menu"
+                                title="Mega Menu">Dashboard</a></li>
+                        <li class="p_social"><a href="index.php?active=pricing" class="social icon-menu"
+                                title="Pricing">Pricing</a></li>
+                        <li class="p_social"><a href="index.php?active=selling" class="social icon-menu" title="Pricing">Selling</a></li>
+                        <li class="p_news"><a href="#" class="news icon-menu" title="News">News</a></li>
+                        <li class="p_blog"><a href="#" class="blog icon-menu" title="Blog">Blog</a></li>
+                    </ul>
+                </div>
+
+                <div class="navbar-right">
+                    <div id="navbar-menu">
+                        <ul class="nav navbar-nav">
+                            <li><a class="icon-menu" id="logout-btn"><i class="icon-power"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar" id="myBar"></div>
+            </div>
+        </nav>
+        <!-- End Navbar -->
+
+        <!-- Sidebar -->
+        <div class="overlay"></div>
+        <div id="left-sidebar" class="sidebar">
+            <div class="navbar-brand">
+                <a href="index.php"><img src="./assets/img/ic.png" alt="Oculux Logo"
+                        class="img-fluid logo"><span>Bot</span></a>
+                <button type="button" class="btn-toggle-offcanvas btn btn-sm float-right"><i
+                        class="lnr lnr-menu icon-close"></i></button>
+            </div>
+
+            <div class="sidebar-scroll">
+                <nav id="left-sidebar-nav" class="sidebar-nav">
+                    <ul id="main-menu" class="metismenu">
+                        <li class="header">Main</li>
+                        <li><a href="index.php?active=profile"><i class="fa fa-user"></i><span>Profile</span></a></li>
+                        <li><a href="index.php?active=users"><i class="fa fa-users"></i><span>Users</span></a></li>
+                        <li><a href="index.php?active=content"><i class="fa fa-picture-o"></i><span>Content</span></a>
+                        </li>
+                        <li><a href="index.php?active=task"><i class="fa fa-check-square-o"></i><span>Task</span></a>
+                        </li>
+                        <li class="header">Tools</li>
+                        <li><a href="index.php?active=scraping"><i class="fa fa-info"></i><span>Scraping</span></a></li>
+                        <li><a href="index.php?active=manage"><i class="fa fa-cog"></i><span>Manage</span></a></li>
+                        <li><a href="index.php?active=engage"><i class="fa fa-heart"></i><span>Engage</span></a></li>
+                        <li><a href="index.php?active=dl"><i class="fa fa-download"></i><span>Download</span></a></li>
+                        <li class="header">Pro</li>
+                        <li><a href="index.php?active=message"><i class="fa fa-inbox"></i><span>Message</span></a></li>
+                        <li><a href="index.php?active=shedual"><i class="fa fa-inbox"></i><span>Shedual</span></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <!-- End Sidebar-->
+
+        <!-- Dashaboard -->
+        <div id="main-content">
+            <div class="container-fluid">
+                <!-- Profile Section -->
+                <h5 style="padding: 16px 0px;">Profile</h5>
+                <h6>Coonect Instagram Account</h6>
+                <p>You will redirect to https://instagram.com in new window.</p>
+
+                <!-- End Profile Section -->
+            </div>
+        </div>
+        <!-- End Dashboard-->
+
+        <!-- Footer-->
+
+        <script src="../renderer.js"></script>
+        <script src="assets/js/libscripts.bundle.js"></script>
+        <script src="assets/js/vendorscripts.bundle.js"></script>
+        <script src="assets/js/mainscripts.bundle.js"></script>
+        <script src="assets/js/c3.bundle.js"></script>
+        <script src="assets/js/chartist.bundle.js"></script>
+        <script src="assets/js/knob.bundle.js"></script>
+        <script src="assets/js/sweetalert.min.js"></script>
+        <script src="assets/js/dialogs.js"></script>
+
+        <!-- End Footer-->
+</body>
+
+</html>
