@@ -19,9 +19,9 @@
     <link rel="stylesheet" href="assets/css/chartist-plugin-tooltip.css">
     <link rel="stylesheet" href="assets/css/c3.min.css" />
     <link rel="stylesheet" href="assets/css/sweetalert.css">
-    <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/toastr.min.css">
     <link rel="stylesheet" href="assets/css/site.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 
     <script src="./app.js"></script>
     <script src="./index.js"></script>
@@ -79,18 +79,22 @@
                                 <li class="header blue">Last 5 Notifications</li>
 
                                 <!-- <?php // $render->renderNotification(); ?> -->
-
                             </ul>
 
                         </li>
 
-                        <li><a href="javascript:void(0);" class="megamenu_toggle icon-menu"
-                                title="Mega Menu">Dashboard</a></li>
-                        <li class="p_social"><a href="index.php?active=pricing" class="social icon-menu"
-                                title="Pricing">Pricing</a></li>
-                        <li class="p_social"><a href="index.php?active=selling" class="social icon-menu" title="Pricing">Selling</a></li>
-                        <li class="p_news"><a href="#" class="news icon-menu" title="News">News</a></li>
-                        <li class="p_blog"><a href="#" class="blog icon-menu" title="Blog">Blog</a></li>
+                        <li>
+                            <a href="#sec-profile" onclick="openSection('#sec-profile');"
+                                class="megamenu_toggle icon-menu" title="Mega Menu">Dashboard</a>
+                        </li>
+                        <li class="p_social">
+                            <a href="#sec-pricing" onclick="openSection('#sec-pricing');" class="social icon-menu"
+                                title="Pricing">Pricing</a>
+                        </li>
+                        <li class="p_social">
+                            <a href="#sec-selling" onclick="openSection('#sec-selling');" class="social icon-menu"
+                                title="Selling">Selling</a>
+                        </li>
                     </ul>
                 </div>
 
@@ -122,20 +126,56 @@
                 <nav id="left-sidebar-nav" class="sidebar-nav">
                     <ul id="main-menu" class="metismenu">
                         <li class="header">Main</li>
-                        <li><a href="index.php?active=profile"><i class="fa fa-user"></i><span>Profile</span></a></li>
-                        <li><a href="index.php?active=users"><i class="fa fa-users"></i><span>Users</span></a></li>
-                        <li><a href="index.php?active=content"><i class="fa fa-picture-o"></i><span>Content</span></a>
+                        <li>
+                            <a href="#sec-profile" onclick="openSection('#sec-profile');">
+                                <i class="fa fa-user"></i><span>Profile</span>
+                            </a>
                         </li>
-                        <li><a href="index.php?active=task"><i class="fa fa-check-square-o"></i><span>Task</span></a>
+                        <li>
+                            <a href="#sec-users" onclick="openSection('#sec-users');">
+                                <i class="fa fa-users"></i><span>Users</span>
+                            </a>
+                        </li>
+                        <!--<li>
+                            <a href="#sec-content" onclick="openSection('#sec-content');">
+                                <i class="fa fa-picture-o"></i><span>Content</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#sec-task" onclick="openSection('#sec-task');">
+                                <i class="fa fa-check-square-o"></i><span>Task</span>
+                            </a>
                         </li>
                         <li class="header">Tools</li>
-                        <li><a href="index.php?active=scraping"><i class="fa fa-info"></i><span>Scraping</span></a></li>
-                        <li><a href="index.php?active=manage"><i class="fa fa-cog"></i><span>Manage</span></a></li>
-                        <li><a href="index.php?active=engage"><i class="fa fa-heart"></i><span>Engage</span></a></li>
-                        <li><a href="index.php?active=dl"><i class="fa fa-download"></i><span>Download</span></a></li>
-                        <li class="header">Pro</li>
-                        <li><a href="index.php?active=message"><i class="fa fa-inbox"></i><span>Message</span></a></li>
-                        <li><a href="index.php?active=shedual"><i class="fa fa-inbox"></i><span>Shedual</span></a></li>
+                        <!--<li>
+                            <a href="#sec-scraping" onclick="openSection('#sec-scraping');">
+                                <i class="fa fa-info"></i><span>Scraping</span></a></li>
+                        <li>
+                            <a href="#sec-manage" onclick="openSection('#sec-manage');">
+                                <i class="fa fa-cog"></i><span>Manage</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#sec-engage" onclick="openSection('#sec-engage');">
+                                <i class="fa fa-heart"></i><span>Engage</span>
+                            </a>
+                        </li> -->
+                        <li>
+                            <a href="#sec-download" onclick="openSection('#sec-download');">
+                                <i class="fa fa-download"></i><span>Download</span>
+                            </a>
+                        </li>
+                        <!-- <li class="header">Pro</li>
+                        <li>
+                            <a href="#sec-message" onclick="openSection('#sec-message');">
+                                <i class="fa fa-inbox"></i><span>Message</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#sec-shedual" onclick="openSection('#sec-shedual');">
+                                <i class="fa fa-inbox"></i><span>Shedual</span>
+                            </a>
+                        </li> -->
                     </ul>
                 </nav>
             </div>
@@ -147,28 +187,129 @@
         <div id="main-content">
             <div class="container-fluid">
                 <!-- Profile Section -->
-                <h5 style="padding: 16px 0px;">Profile</h5>
-                <h6>Coonect Instagram Account</h6>
-                <p>You will redirect to https://instagram.com in new window.</p>
+                <section id="sec-profile" class="sec-visible section">
+                    <h5 style="padding: 16px 0px;">Profile</h5>
+                    <div id="connect-instagram" class="sec-remove">
+                        <a href="#" id="instagram-btn">
+                            <h6>Connect Instagram Account</h6>
+                        </a>
+                        <p>You will redirect to https://instagram.com in new window.</p>
+                    </div>
+
+                    <div style="margin-top: 0px;"></div>
+
+                    <div class="row clearfix sec-remove" id="user-info">
+                        <div class="col-lg-3 col-md-6">
+                            <div class="card">
+                                <div class="body">
+                                    <div class="d-flex align-items-center">
+                                        <img class="icon-in-bg bg-indigo text-white rounded-circle" id="user-ig-dp"
+                                            src="" />
+                                        <div class="ml-4">
+                                            <span id="user-ig-name">Full Name</span>
+                                            <h6 class="mb-0 font-weight-medium" id="user-ig-username">Username</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="card">
+                                <div class="body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="icon-in-bg bg-indigo text-white rounded-circle"><i
+                                                class="fa fa-users"></i></div>
+                                        <div class="ml-4">
+                                            <span>Following</span>
+                                            <h6 class="mb-0 font-weight-medium" id="user-ig-followings">0</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="card">
+                                <div class="body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="icon-in-bg bg-indigo text-white rounded-circle"><i
+                                                class="fa fa-users"></i></div>
+                                        <div class="ml-4">
+                                            <span>Followers</span>
+                                            <h6 class="mb-0 font-weight-medium" id="user-ig-followers">0</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="card">
+                                <div class="body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="icon-in-bg bg-indigo text-white rounded-circle"><i
+                                                class="fa fa-picture-o"></i></div>
+                                        <div class="ml-4">
+                                            <span>Total Posts</span>
+                                            <h6 class="mb-0 font-weight-medium" id="user-ig-posts">0</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
 
                 <!-- End Profile Section -->
+
+                <!-- Download Section-->
+                <section id="sec-download" class="sec-hidden section">
+                    <h5 style="padding: 16px 0px;">Download</h5>
+                    <div class="row clearfix">
+                        <!--
+                        <form method="post" action="request.php" name="dl_user">
+                            <P style="padding: 0 16px;">Get users profile picture, posts and story</p>
+                            <input type="hidden" value="dl_user" name="request" />
+                            <div class="input-group mb-3" style="margin: 16px;">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">@</span>
+                                </div>
+                                <input type="text" class="form-control" name="username" placeholder="Username"
+                                    aria-label="Username" aria-describedby="basic-addon1">
+                                <select class="form-control" name="type">
+                                    <option value="hastag">Hastag</option>
+                                    <option value="post">Post</option>
+                                </select>
+
+                                <input type="number" class="form-control" name="max" value="50" placeholder="Max value"
+                                    aria-label="Max" aria-describedby="basic-addon1">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button" id="dl-btn">Start
+                                        Download</button>
+                                </div>
+                            </div>
+                        </form>
+                        -->
+                    </div>
+                </section>
             </div>
         </div>
-        <!-- End Dashboard-->
+        <!-- End Download Section-->
+    </div>
+    <!-- End Dashboard-->
 
-        <!-- Footer-->
+    <!-- Footer-->
 
-        <script src="../renderer.js"></script>
-        <script src="assets/js/libscripts.bundle.js"></script>
-        <script src="assets/js/vendorscripts.bundle.js"></script>
-        <script src="assets/js/mainscripts.bundle.js"></script>
-        <script src="assets/js/c3.bundle.js"></script>
-        <script src="assets/js/chartist.bundle.js"></script>
-        <script src="assets/js/knob.bundle.js"></script>
-        <script src="assets/js/sweetalert.min.js"></script>
-        <script src="assets/js/dialogs.js"></script>
+    <script src="../renderer.js"></script>
+    <script src="assets/js/libscripts.bundle.js"></script>
+    <script src="assets/js/vendorscripts.bundle.js"></script>
+    <script src="assets/js/mainscripts.bundle.js"></script>
+    <script src="assets/js/c3.bundle.js"></script>
+    <script src="assets/js/chartist.bundle.js"></script>
+    <script src="assets/js/knob.bundle.js"></script>
+    <script src="assets/js/sweetalert.min.js"></script>
+    <script src="assets/js/dialogs.js"></script>
 
-        <!-- End Footer-->
+    <!-- End Footer-->
 </body>
 
 </html>

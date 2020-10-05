@@ -1,0 +1,36 @@
+html {
+    overflow: scroll;
+    overflow-x: hidden;
+}
+::-webkit-scrollbar {
+    width: 0px;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+}
+
+section {
+    position: absolute;
+    min-height: 90vh;
+    width: calc(100% - 56px);
+    
+}
+
+section div {
+width: auto;
+}
+
+.sec-hidden {
+    visibility: hidden;
+    opacity: 0;
+    height: 0!important;
+}
+
+.sec-visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.sec-remove {
+    visibility: collapse;
+    height: 0;
+}
+

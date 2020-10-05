@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, MenuItem, shell, ipcRenderer } = require('electron');
+const { app, BrowserWindow, Menu, MenuItem, shell, ipcRenderer, ipcMain } = require('electron');
 const fs = require('fs');
 const { constants } = require('buffer');
 const path = require('path');
@@ -16,6 +16,49 @@ function checkInputs(ele) {
     } else {
         return true;
     }
+}
+
+function getInstagramUsername() {
+
+    let res = false;
+
+    if (db.valid('instagram', dbPath)) {
+        const key = 'username';
+
+        db.getField('instagram', dbPath, key, (succ, data) => {
+            if (succ) {
+                res = data[0];
+            }
+        })
+    }
+
+    return res;
+}
+
+function checkDatabaseStatus(table) {
+    let res = false;
+
+    if (db.valid(table, dbPath)) {
+        const key = 'status';
+
+        db.getField(table, dbPath, key, (succ, data) => {
+            if (succ) {
+                if (data[0] == true) {
+                    res = true;
+                }
+            }
+        })
+    }
+
+    return res;
+}
+
+function isInstagramConnected() {
+    return checkDatabaseStatus('instagram');
+}
+
+function connectInstagram() {
+    ipcRenderer.send('connect-instagram-signal', true);
 }
 
 $(document).ready(function () {
