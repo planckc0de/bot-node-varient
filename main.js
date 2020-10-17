@@ -1,20 +1,18 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, Menu, MenuItem, shell, ipcMain, ipcRenderer } = require('electron');
 const path = require('path');
-const db = require('electron-db');
-const dbPath = path.join(__dirname, 'public/data/');
-
-require('chromedriver');
-const { Builder, By, until } = require('selenium-webdriver');
-const chrome = require('selenium-webdriver/chrome');
-const chromedriverPath = require('chromedriver').path.replace('app.asar', 'app.asar.unpacked');
-chrome.setDefaultService(new chrome.ServiceBuilder(chromedriverPath).build());
-
+const bot = require('planckbot');
+//const ig = new bot.instagram(false);
 const crypto = require('crypto-js');
 const fs = require('fs');
 const { constants } = require('buffer');
+var sqlite3 = require('sqlite3');
+const { callbackify } = require('util');
+var db = new sqlite3.Database(path.join(__dirname, 'public/database/default.db'));
 
-const userDataJson = path.join(__dirname, 'public/user/cache/data.json');
+const myjsonclass = require('./public/util/myjson.js');
+const myjsondir = './public/database/';
+const myjson = new myjsonclass(myjsondir.toString());
 
 let mainWindow
 
@@ -220,260 +218,18 @@ function isFileExists(file) {
     }
 }
 
-async function openBrowser(headless = true) {
-
-    let chromeOptions = new chrome.Options;
-    chromeOptions.addArguments('disable-infobars');
-    chromeOptions.setUserPreferences({ credential_enable_service: false });
-
-    if (headless == true) {
-        chromeOptions.addArguments('headless');
-    }
-
-    let browser = await new Builder().setChromeOptions(chromeOptions).forBrowser('chrome').build();
-
-    return browser;
-
-}
-
-async function closeBrowser(browser) {
-    return await browser.quit();
-}
-
-async function locateElement(browser, type, value) {
-
-    switch (type) {
-        case 'css':
-            await browser.wait(until.elementLocated(By.css(value)), 30000, 'Looking for element');
-            break;
-        case 'id':
-            await browser.wait(until.elementLocated(By.id(value)), 30000, 'Looking for element');
-            break;
-        case 'name':
-            await browser.wait(until.elementLocated(By.name(value)), 30000, 'Looking for element');
-            break;
-        case 'class':
-            await browser.wait(until.elementLocated(By.className(value)), 30000, 'Looking for element');
-            break;
-        case 'xpath':
-            await browser.wait(until.elementLocated(By.className(value)), 3000, 'Looking for element');
-            break;
-    }
-
-}
-
-async function getElement(browser, type, value) {
-
-    await locateElement(browser, type, value);
-
-    switch (type) {
-        case 'css':
-            return await browser.findElement(By.css(value));
-        case 'id':
-            return await browser.findElement(By.id(value));
-        case 'name':
-            return await browser.findElement(By.name(value));
-        case 'class':
-            return await browser.findElement(By.className(value));
-        case 'xpath':
-            return await browser.findElement(By.xpath(value));
-    }
-
-}
-
-async function getElements(browser, type, value) {
-
-    await locateElement(browser, type, value);
-
-    switch (type) {
-        case 'css':
-            return await browser.findElements(By.css(value));
-        case 'class':
-            return await browser.findElements(By.className(value));
-        case 'xpath':
-            return await browser.findElements(By.xpath(value));
-    }
-}
-
-async function autoType(ele, value) {
-    return await ele.sendKeys(value);
-}
-
-async function openUrl(browser, url) {
-    return await browser.get(url);
-}
-
-function getCookieValue(cookie, value) {
-
-    for (var i = 0; i < cookie.length; i++) {
-        if (cookie[i].name == value) {
-            return cookie[i].value;
-        }
-    }
-
-}
-
-function setUserInstagramSession(user, pass, cookie) {
-    //let epass = encryptString(pass, "18112701121260147160");
-    //let mid = encryptString(cookie[0].value, pass);
-    // let ig_did = encryptString(cookie[1].value, pass);
-    //let csrftoken = encryptString(cookie[2].value, pass);
-    let time = Math.round(+new Date() / 1000).toString();
-
-    let userSession = {
-        username: user,
-        password: pass,
-        s_mid: getCookieValue(cookie, 'mid'),
-        s_ig_did: getCookieValue(cookie, 'ig_did'),
-        s_csrftoken: getCookieValue(cookie, 'csrftoken'),
-        s_sessionid: getCookieValue(cookie, 'sessionid'),
-        s_ds_user_id: getCookieValue(cookie, 'ds_user_id'),
-        time: time,
-        status: true
-    }
-
-    if (db.valid('instagram', dbPath)) {
-        db.insertTableContent('instagram', dbPath, userSession, (succ, msg) => {
-            if (succ) {
-                ipcRenderer.send('is-instagram-connected', true);
-            }
-        })
-    }
-}
-
-function getUserInstagramSession() {
-
-    let session;
-
-    if (db.valid('instagram', dbPath)) {
-        const key = 'status';
-
-        session = false;
-
-        db.getField('instagram', dbPath, key, (succ, data) => {
-            if (succ) {
-                if (data[0] == true) {
-                    let rawdata = fs.readFileSync(dbPath+'instagram.json');
-                    session = JSON.parse(rawdata);
-                } 
-            }
-        })
-    }
-
-    return session;
-}
-
-function sleep(seconds) {
-    var waitUntil = new Date().getTime() + seconds * 1000;
-    while (new Date().getTime() < waitUntil) true;
-}
-
-async function closeNotificationDialog(browser) {
-    sleep(3);
-    let ele = await getElement(browser, "css", "button.aOOlW.HoLwm");
-    ele.click();
-}
-
-async function connectInstagramAccount() {
-
-    const browser = await openBrowser(false);
-    let url = 'https://www.instagram.com/accounts/login/';
-
-    await openUrl(browser, url).then(function () {
-        let user;
-        let pass;
-
-        var up = setInterval(async function () {
-            let inputs = 'form input';
-            var element = await getElements(browser, 'css', inputs);
-
-            element[0].getAttribute("value").then(function (value) {
-                user = value;
-            });
-
-            element[1].getAttribute("value").then(function (value) {
-                pass = value;
-            });
-
-        }, 1000);
-
-        browser.wait(until.titleIs('Instagram')).then(function () {
-            clearInterval(up)
-            browser.manage().getCookies().then(async function (cookies) {
-                setUserInstagramSession(user, pass, cookies);
-                await closeBrowser(browser);
-                app.relaunch()
-                app.quit()
-            });
-        });
-    });
-
-}
-
-async function instagramLogin() {
-
-    let isSaved = getUserInstagramSession();
-    const browser = await openBrowser(false);
-
-    if (!isSaved) {
-
-        let url = 'https://www.instagram.com/accounts/login/';
-        await openUrl(browser, url);
-
-        let user = "";
-        let pass = "";
-        let inputs = 'form input';
-
-        var element = await getElements(browser, 'css', inputs);
-
-        await autoType(element[0], user);
-        await autoType(element[1], pass + '\n').then(async function () {
-            console.log('Login success');
-            sleep(5);
-            await openUrl(browser, "https://www.instagram.com/" + user + "/").then(function () {
-                browser.manage().getCookies().then(function (cookies) {
-                    setUserInstagramSession(user, pass, cookies);
-                });
-            });
-
-        });
-    } else {
-
-        await openUrl(browser, "https://www.instagram.com/" + isSaved['instagram'][0].username);
-
-        await browser.manage().deleteCookie('mid');
-        await browser.manage().deleteCookie('sessionid');
-        await browser.manage().deleteCookie('ig_did');
-        await browser.manage().deleteCookie('csrftoken');
-
-        await browser.manage().addCookie({ name: 'ig_did', value: isSaved['instagram'][0].s_ig_did, 'sameSite': 'Strict' });
-        await browser.manage().addCookie({ name: 'sessionid', value: isSaved['instagram'][0].s_sessionid, 'sameSite': 'Strict' });
-        await browser.manage().addCookie({ name: 'ds_user_id', value: isSaved['instagram'][0].s_ds_user_id, 'sameSite': 'Strict' });
-        await browser.manage().addCookie({ name: 'mid', value: isSaved['instagram'][0].s_mid, 'sameSite': 'Strict' });
-        await browser.manage().addCookie({ name: 'csrftoken', value: isSaved['instagram'][0].s_csrftoken, 'sameSite': 'Strict' });
-
-        sleep(5);
-        await openUrl(browser, "https://www.instagram.com/");
-        await closeNotificationDialog(browser);
-
-    }
-}
-
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
 
-    defaultSetup();
-    let isLogin = checkUserLogin();
+    defaultSetup()
 
-    if (!isLogin) {
+    if (myjson.readValue('flags', 'isLoginRequired')) {
         createWindow('login');
     } else {
         createWindow();
     }
-
-    //instagramLogin();
 
     app.on('activate', function () {
         // On macOS it's common to re-create a window in the app when the
@@ -487,79 +243,172 @@ app.whenReady().then(() => {
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', function () {
-    if (process.platform !== 'darwin') app.quit()
+    if (process.platform !== 'darwin') {
+        ig.driver.quit();
+        db.close();
+        app.quit()
+    }
 })
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-function checkUserLogin() {
-
-    let res = false;
-
-    if (db.valid('user', dbPath)) {
-        const key = 'status';
-
-        db.getField('user', dbPath, key, (succ, data) => {
-            if (succ) {
-                if (data[0] == true) {
-                    res = true;
-                }
-            }
-        })
-    }
-    return res;
+/*
+function getFlagValue(name) {
+    let v;
+    db.serialize(function () {
+        let query = `select meta_value from bot where meta_name = ?`;
+        db.get(query, [name], function (err, row) {
+            v = row.meta_value;
+        });
+    });
+    return v;
 }
 
+function setFlagValueWithCheck(name, val) {
+
+    if (getFlagValue(name) != 'undefined') {
+
+    }
+
+    db.serialize(function () {
+        let query = 'replace into bot(name, meta_name, meta_value) values(?,?,?)';
+        var stmt = db.prepare(query);
+        stmt.run(`flags`, name, val);
+        stmt.finalize();
+    });
+}
+
+
+function setFlagValue(name, val) {
+    db.serialize(function () {
+        let query = 'insert into bot(name, meta_name, meta_value) values(?,?,?)';
+        var stmt = db.prepare(query);
+        stmt.run(`flags`, name, val);
+        stmt.finalize();
+    });
+}
+
+function replaceFlagValue(name, val) {
+    db.serialize(function () {
+        let query = 'replace into bot(name, meta_name, meta_value) values(?,?,?)';
+        var stmt = db.prepare(query);
+        stmt.run(`flags`, name, val);
+        stmt.finalize();
+    });
+}
+
+function checkUserLogin() {
+
+    let v = getFlagValue('currentUser');
+    console.log(v);
+    if (v) {
+        console.log('yes');
+    } else {
+        console.log('no');
+    }
+}
+*/
 // App functions
 
 function defaultSetup() {
 
-    if (!db.tableExists('user', dbPath)) {
-        db.createTable('user', dbPath, (succ, msg) => {
-            if (succ) {
-                console.log(msg)
-            } else {
-                console.log('An error has occured. ' + msg)
-            }
-        })
+    myjson.createTable('flags');
+    myjson.createTable('session');
+
+    db.serialize(function () {
+
+        db.run("CREATE TABLE IF NOT EXISTS bot ("
+            + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + "name TEXT NOT NULL,"
+            + "meta_name TEXT NOT NULL UNIQUE,"
+            + "meta_value TEXT NULL DEFAULT NULL,"
+            + "timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)");
+
+        db.run("CREATE TABLE IF NOT EXISTS user ("
+            + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + "username TEXT NULL DEFAULT NULL,"
+            + "uid TEXT NULL DEFAULT NULL,"
+            + "lid TEXT NULL DEFAULT NULL,"
+            + "ltoken TEXT NULL DEFAULT NULL,"
+            + "lsession TEXT NOT NULL)");
+
+        db.run("CREATE TABLE IF NOT EXISTS session ("
+            + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + "name TEXT NOT NULL,"
+            + "meta_name TEXT NOT NULL,"
+            + "meta_value TEXT NULL DEFAULT NULL,"
+            + "timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)");
+
+        db.run("CREATE TABLE IF NOT EXISTS instagram_users ("
+            + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + "username TEXT NOT NULL,"
+            + "meta_name TEXT NOT NULL,"
+            + "meta_value TEXT NULL DEFAULT NULL,"
+            + "timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)");
+
+        db.run("CREATE TABLE IF NOT EXISTS instagram_medias ("
+            + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + "url TEXT NOT NULL,"
+            + "meta_name TEXT NOT NULL,"
+            + "meta_value TEXT NULL DEFAULT NULL,"
+            + "timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)");
+
+        db.run("CREATE TABLE IF NOT EXISTS instagram_state ("
+            + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + "usernameTEXT NOT NULL,"
+            + "meta_name TEXT NOT NULL,"
+            + "meta_value TEXT NULL DEFAULT NULL,"
+            + "timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)");
+
+        db.run("CREATE TABLE IF NOT EXISTS task ("
+            + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + "name TEXT NOT NULL,"
+            + "meta_name TEXT NOT NULL,"
+            + "meta_value TEXT NULL DEFAULT NULL,"
+            + "timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,"
+            + "start_time DATETIME NULL DEFAULT CURRENT_TIMESTAMP,"
+            + "end_time DATETIME NULL DEFAULT NULL)");
+
+        db.run("CREATE TABLE IF NOT EXISTS settings ("
+            + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + "name TEXT NOT NULL,"
+            + "meta_name TEXT NOT NULL,"
+            + "meta_value TEXT NULL DEFAULT NULL,"
+            + "timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)");
+    });
+
+    let flagData = {
+        currentUser: null,
+        isFirstLaunch: true,
+        isInstagramConnected: false,
+        isLoginRequired: true,
+        status: true,
+        where: true
     }
 
-    if (!db.tableExists('instagram', dbPath)) {
-        db.createTable('instagram', dbPath, (succ, msg) => {
-            if (succ) {
-                console.log(msg)
-            } else {
-                console.log('An error has occured. ' + msg)
-            }
-        })
-    }
+    let checkFlagJson = myjson.readValue('flags', 'status');
 
-    if (!db.tableExists('setting', dbPath)) {
-        db.createTable('setting', dbPath, (succ, msg) => {
-            if (succ) {
-                console.log(msg)
-            } else {
-                console.log('An error has occured. ' + msg)
-            }
-        })
+    if (!checkFlagJson) {
+        myjson.insertValue('flags', flagData);
+    } else {
+        myjson.updateValue('flags', { "status": true }, { "isFirstLaunch": false });
     }
 }
 
 function userLogout() {
 
-    db.clearTable('instagram', dbPath, (succ, msg) => {
-        //
-    })
-
-    db.clearTable('setting', dbPath, (succ, msg) => {
-        //
-    })
-
-    db.clearTable('user', dbPath, (succ, msg) => {
+    jdb.clearTable('flags', dbPath, (succ, msg) => {
         if (succ) {
             app.quit();
         }
     })
+}
+
+async function connectInstagramAccount() {
+    let i = new bot.instagram(false);
+    let mysession = await i.userLogin();
+    myjson.insertValue('session', mysession);
+    i.driver.quit();
 }
 
 // IPC Methods
@@ -574,4 +423,12 @@ ipcMain.on('connect-instagram-signal', function (event, arg) {
     if (arg) {
         connectInstagramAccount();
     }
+})
+
+ipcMain.on('flagValue', function (event, arg) {
+    console.log(arg);
+})
+
+ipcMain.on('set-flag-value', function (event, arg) {
+    myjson.updateValue('flags', { "where": true }, arg);
 })

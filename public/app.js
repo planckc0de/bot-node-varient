@@ -4,8 +4,12 @@ const { constants } = require('buffer');
 const path = require('path');
 const $ = require("jquery");
 const toastr = require("toastr");
-const db = require('electron-db');
-const dbPath = path.join(__dirname, 'data/');
+const myjsonclass = require('./util/myjson.js');
+const myjsondir = './database/';
+const myjson = new myjsonclass(myjsondir);
+
+var sqlite3 = require('sqlite3').verbose();
+var db = new sqlite3.Database(path.join(__dirname, 'database/default.db'));
 
 var userApiToken = "NODTOS8C98VEDVIJ";
 var userApiKey = "WNSdlsr0OZPzRlgl9i4YjTfhmE5vxQDceXMiPmUds0pcn4GAZRLksexIZ2xEbUE3";
@@ -54,6 +58,8 @@ function checkDatabaseStatus(table) {
 }
 
 function isInstagramConnected() {
+    let check = myjson.readValue('session', 'instagram');
+    console.log(check);
     return checkDatabaseStatus('instagram');
 }
 
@@ -64,6 +70,7 @@ function connectInstagram() {
 $(document).ready(function () {
 
     toastr.options.preventDuplicates = true;
+    myjson.updateValue('flags', { "where": true }, { "isOnline": true });
 
     $('#login-btn').on('click', function (e) {
 
@@ -95,27 +102,24 @@ $(document).ready(function () {
                 success: function (responce) {
 
                     if (responce.status == "success") {
-                        let time = Math.round(+new Date() / 1000).toString();
 
-                        let userData = {
-                            username: responce.username,
-                            user_id: responce.user_id,
-                            login_id: responce.login_id,
-                            login_token: responce.login_token,
-                            login_session: responce.login_session,
-                            time: time,
-                            status: true
-                        }
+                        db.serialize(function () {
+                            var stmt = db.prepare("INSERT INTO user(username, uid, lid, ltoken, lsession) VALUES (?, ?, ?, ?, ?)");
+                            stmt.run(responce.username, responce.user_id, responce.login_id, responce.login_token, responce.login_session);
+                            stmt.finalize();
+                            console.log(responce.user_id);
 
-                        if (db.valid('user', dbPath)) {
-                            db.insertTableContent('user', dbPath, userData, (succ, msg) => {
-                                console.log("Success: " + succ);
-                                console.log("Message: " + msg);
-                            })
-                        }
+                            ipcRenderer.send('set-flag-value', {
+                                "isLoginRequired": false
+                            });
 
-                        $(location).attr('href', './index.html');
+                            ipcRenderer.send('set-flag-value', {
+                                "currentUser": responce.user_id
+                            });
+
+                        });
                     }
+                    $(location).attr('href', './index.html');
                 },
                 error: function () {
                     toastr.warning('Something goes wrong', 'Request failed');

@@ -55,6 +55,7 @@ function setInstagramUserInfo() {
 }
 
 function renderProfile() {
+    /*
     if (isInstagramConnected()) {
         $('#user-info').removeClass('sec-remove');
         setInstagramUserInfo()
@@ -66,5 +67,8 @@ function renderProfile() {
     } else {
         $('#connect-instagram').removeClass('sec-remove');
     }
+    */
+
+    $('#connect-instagram').removeClass('sec-remove');
 }
 
