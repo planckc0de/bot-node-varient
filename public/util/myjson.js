@@ -2,6 +2,8 @@ const db = require('electron-db');
 
 class Myjson {
 
+    result;
+
     constructor(mypath) {
         this.dbpath = mypath;
     }
@@ -13,13 +15,15 @@ class Myjson {
     }
 
     readValue(table, name) {
-        let res = 0;
         db.getField(table, this.dbpath, name, (succ, data) => {
-            if (succ) {
-                res = data[0];
+            if(succ) {
+                this.result = data[0];
+            } else {
+                this.result = false;
             }
+            
         })
-        return res;
+        return this.result;
     }
 
     createTable(name) {

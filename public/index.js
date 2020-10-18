@@ -24,15 +24,12 @@ function openSection(ele) {
     $(ele).removeClass('sec-hidden').addClass('sec-visible');
 }
 
-function renderConnectInstagram() {
-    if (!isInstagramConnected()) {
-        $('#connect-instagram').removeClass('sec-remove');
-    }
-}
-
 function setInstagramUserInfo() {
+
+    getInstagramUserInfo(myjson.readValue('session', 'ds_user_id'));
+
     var requestData = {
-        "username": getInstagramUsername()
+        "username": myjson.readValue('session', 'username')
     };
 
     $.ajax({
@@ -55,8 +52,9 @@ function setInstagramUserInfo() {
 }
 
 function renderProfile() {
-    /*
-    if (isInstagramConnected()) {
+
+    if (myjson.readValue('flags', 'isInstagramConnected')) {
+        
         $('#user-info').removeClass('sec-remove');
         setInstagramUserInfo()
 
@@ -67,8 +65,4 @@ function renderProfile() {
     } else {
         $('#connect-instagram').removeClass('sec-remove');
     }
-    */
-
-    $('#connect-instagram').removeClass('sec-remove');
 }
-

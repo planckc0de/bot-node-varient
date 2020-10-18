@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, Menu, MenuItem, shell, ipcMain, ipcRenderer } = require('electron');
+const { app, BrowserWindow, Menu, MenuItem, shell, ipcMain, ipcRenderer, session } = require('electron');
 const path = require('path');
 const bot = require('planckbot');
 //const ig = new bot.instagram(false);
@@ -314,6 +314,7 @@ function defaultSetup() {
 
     myjson.createTable('flags');
     myjson.createTable('session');
+    myjson.createTable('user');
 
     db.serialize(function () {
 
@@ -396,18 +397,17 @@ function defaultSetup() {
 }
 
 function userLogout() {
-
-    jdb.clearTable('flags', dbPath, (succ, msg) => {
-        if (succ) {
-            app.quit();
-        }
-    })
+     myjson.deleteTable('flags');
+    myjson.deleteTable('session');
+    app.quit();
 }
 
 async function connectInstagramAccount() {
     let i = new bot.instagram(false);
     let mysession = await i.userLogin();
     myjson.insertValue('session', mysession);
+    myjson.updateValue('flags', { "where": true }, { "isInstagramConnected": true });
+    myjson.updateValue('session', { "type": "instagram" }, { "username": null });
     i.driver.quit();
 }
 

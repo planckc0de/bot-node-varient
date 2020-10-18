@@ -5,7 +5,7 @@ const path = require('path');
 const $ = require("jquery");
 const toastr = require("toastr");
 const myjsonclass = require('./util/myjson.js');
-const myjsondir = './database/';
+const myjsondir = path.join(__dirname, 'database/');
 const myjson = new myjsonclass(myjsondir);
 
 var sqlite3 = require('sqlite3').verbose();
@@ -22,45 +22,21 @@ function checkInputs(ele) {
     }
 }
 
-function getInstagramUsername() {
+function getInstagramUserInfo(userid) {
 
-    let res = false;
-
-    if (db.valid('instagram', dbPath)) {
-        const key = 'username';
-
-        db.getField('instagram', dbPath, key, (succ, data) => {
-            if (succ) {
-                res = data[0];
+    $.ajax({
+        type: 'GET',
+        url: 'https://api.planckstudio.in/bot/v1/getbasicinfo.php?userid=' + userid,
+        dataType: 'json',
+        success: function (responce) {
+            if (responce.status == 'success') {
+                myjson.updateValue('session', { "type": "instagram" }, { "username": responce.username });
             }
-        })
-    }
-
-    return res;
-}
-
-function checkDatabaseStatus(table) {
-    let res = false;
-
-    if (db.valid(table, dbPath)) {
-        const key = 'status';
-
-        db.getField(table, dbPath, key, (succ, data) => {
-            if (succ) {
-                if (data[0] == true) {
-                    res = true;
-                }
-            }
-        })
-    }
-
-    return res;
-}
-
-function isInstagramConnected() {
-    let check = myjson.readValue('session', 'instagram');
-    console.log(check);
-    return checkDatabaseStatus('instagram');
+        },
+        error: function () {
+            console.log('Something goes wrong');
+        }
+    });
 }
 
 function connectInstagram() {
@@ -103,11 +79,21 @@ $(document).ready(function () {
 
                     if (responce.status == "success") {
 
+                        let userData = {
+                            username: responce.username,
+                            userId: responce.user_id,
+                            loginId: responce.login_id,
+                            loginToken: responce.login_token,
+                            loginSession: responce.login_session,
+                            status: true
+                        }
+
+                        myjson.insertValue('user', userData);
+
                         db.serialize(function () {
                             var stmt = db.prepare("INSERT INTO user(username, uid, lid, ltoken, lsession) VALUES (?, ?, ?, ?, ?)");
                             stmt.run(responce.username, responce.user_id, responce.login_id, responce.login_token, responce.login_session);
                             stmt.finalize();
-                            console.log(responce.user_id);
 
                             ipcRenderer.send('set-flag-value', {
                                 "isLoginRequired": false
