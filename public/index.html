@@ -136,7 +136,7 @@
                                 <i class="fa fa-users"></i><span>Users</span>
                             </a>
                         </li>
-                        <!--<li>
+                        <li>
                             <a href="#sec-content" onclick="openSection('#sec-content');">
                                 <i class="fa fa-picture-o"></i><span>Content</span>
                             </a>
@@ -147,7 +147,7 @@
                             </a>
                         </li>
                         <li class="header">Tools</li>
-                        <!--<li>
+                        <li>
                             <a href="#sec-scraping" onclick="openSection('#sec-scraping');">
                                 <i class="fa fa-info"></i><span>Scraping</span></a></li>
                         <li>
@@ -159,13 +159,13 @@
                             <a href="#sec-engage" onclick="openSection('#sec-engage');">
                                 <i class="fa fa-heart"></i><span>Engage</span>
                             </a>
-                        </li> -->
+                        </li>
                         <li>
                             <a href="#sec-download" onclick="openSection('#sec-download');">
                                 <i class="fa fa-download"></i><span>Download</span>
                             </a>
                         </li>
-                        <!-- <li class="header">Pro</li>
+                        <li class="header">Pro</li>
                         <li>
                             <a href="#sec-message" onclick="openSection('#sec-message');">
                                 <i class="fa fa-inbox"></i><span>Message</span>
@@ -175,7 +175,7 @@
                             <a href="#sec-shedual" onclick="openSection('#sec-shedual');">
                                 <i class="fa fa-inbox"></i><span>Shedual</span>
                             </a>
-                        </li> -->
+                        </li>
                     </ul>
                 </nav>
             </div>
@@ -207,7 +207,7 @@
                                             src="" />
                                         <div class="ml-4">
                                             <span id="user-ig-name">Full Name</span>
-                                            <h6 class="mb-0 font-weight-medium" id="user-ig-username">Username</h6>
+                                            <h6 class="mb-0 font-weight-medium" id="user-ig-username">N/A</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -221,7 +221,7 @@
                                                 class="fa fa-users"></i></div>
                                         <div class="ml-4">
                                             <span>Following</span>
-                                            <h6 class="mb-0 font-weight-medium" id="user-ig-followings">0</h6>
+                                            <h6 class="mb-0 font-weight-medium" id="user-ig-followings">N/A</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -235,7 +235,7 @@
                                                 class="fa fa-users"></i></div>
                                         <div class="ml-4">
                                             <span>Followers</span>
-                                            <h6 class="mb-0 font-weight-medium" id="user-ig-followers">0</h6>
+                                            <h6 class="mb-0 font-weight-medium" id="user-ig-followers">N/A</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -249,7 +249,63 @@
                                                 class="fa fa-picture-o"></i></div>
                                         <div class="ml-4">
                                             <span>Total Posts</span>
-                                            <h6 class="mb-0 font-weight-medium" id="user-ig-posts">0</h6>
+                                            <h6 class="mb-0 font-weight-medium" id="user-ig-posts">N/A</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="card">
+                                <div class="body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="icon-in-bg bg-indigo text-white rounded-circle"><i
+                                                class="fa fa-heart"></i></div>
+                                        <div class="ml-4">
+                                            <span>Total Likes</span>
+                                            <h6 class="mb-0 font-weight-medium" id="user-ig-likes">N/A</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="card">
+                                <div class="body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="icon-in-bg bg-indigo text-white rounded-circle"><i
+                                                class="fa fa-comments"></i></div>
+                                        <div class="ml-4">
+                                            <span>Total Comments</span>
+                                            <h6 class="mb-0 font-weight-medium" id="user-ig-comments">N/A</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="card">
+                                <div class="body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="icon-in-bg bg-indigo text-white rounded-circle"><i
+                                                class="fa fa-eye"></i></div>
+                                        <div class="ml-4">
+                                            <span>Total Views</span>
+                                            <h6 class="mb-0 font-weight-medium" id="user-ig-views">N/A</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="card">
+                                <div class="body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="icon-in-bg bg-indigo text-white rounded-circle"><i
+                                                class="fa fa-video-camera"></i></div>
+                                        <div class="ml-4">
+                                            <span>Total Videos</span>
+                                            <h6 class="mb-0 font-weight-medium" id="user-ig-videos">N/A</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -261,11 +317,28 @@
 
                 <!-- End Profile Section -->
 
+                <!-- Content Section -->
+                <section id="sec-content" class="sec-hidden section">
+                    <h5 style="padding: 16px 0px;">Content</h5>
+
+                    <P style="padding: 16px 16px;">Your latest posts</p>
+                    <div class="row clearfix" style="margin-top: 16px;" id="latest-posts">
+                    </div>
+
+                    <center>
+                        <a href="#sec-content" id="load-more-posts">
+                            <p style="margin-bottom: 32px;" class="btn btn-outline-secondary" type="button">Load More Posts
+                            </p>
+                        </a>
+
+                    </center>
+                </section>
+                <!-- End Content Section-->
+
                 <!-- Download Section-->
                 <section id="sec-download" class="sec-hidden section">
                     <h5 style="padding: 16px 0px;">Download</h5>
                     <div class="row clearfix">
-                        <!--
                         <form method="post" action="request.php" name="dl_user">
                             <P style="padding: 0 16px;">Get users profile picture, posts and story</p>
                             <input type="hidden" value="dl_user" name="request" />
@@ -288,7 +361,7 @@
                                 </div>
                             </div>
                         </form>
-                        -->
+
                     </div>
                 </section>
             </div>

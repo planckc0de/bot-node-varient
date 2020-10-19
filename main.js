@@ -246,6 +246,7 @@ app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') {
         ig.driver.quit();
         db.close();
+        myjson.updateValue('flags', { "where": true }, { "isOnline": false });
         app.quit()
     }
 })
@@ -315,6 +316,8 @@ function defaultSetup() {
     myjson.createTable('flags');
     myjson.createTable('session');
     myjson.createTable('user');
+    myjson.createTable('info');
+    myjson.createTable('instagram');
 
     db.serialize(function () {
 
@@ -387,18 +390,66 @@ function defaultSetup() {
         where: true
     }
 
+    let infoData = {
+        type: "instagram",
+        username: null,
+        userid: null,
+        dsuserid: null,
+        name: null,
+        dp: null,
+        bio: null,
+        posts: null,
+        likes: null,
+        comments: null,
+        views: null,
+        avgLikes: null,
+        avgComments: null,
+        avgViews: null,
+        followers: null,
+        followings: null,
+        updated: false,
+        status: true
+    }
+
+    let instagramData = {
+        user: "default",
+        updated: false,
+        status: true
+    }
+
     let checkFlagJson = myjson.readValue('flags', 'status');
 
     if (!checkFlagJson) {
         myjson.insertValue('flags', flagData);
     } else {
-        myjson.updateValue('flags', { "status": true }, { "isFirstLaunch": false });
+        myjson.updateValue('flags', { "where": true }, { "isFirstLaunch": false });
+        myjson.updateValue('flags', { "where": true }, { "isOnline": true });
     }
+
+    let checkInfoData = myjson.readValue('info', 'status');
+
+    if (!checkInfoData) {
+        myjson.insertValue('info', infoData);
+    } else {
+        myjson.updateValue('info', { "status": true }, { "updated": true });
+    }
+
+    let checkInstagramData = myjson.readValue('instagram', 'status');
+
+    if (!checkInstagramData) {
+        myjson.insertValue('instagram', instagramData);
+    } else {
+        myjson.updateValue('info', { "status": true }, { "updated": true });
+    }
+
 }
 
 function userLogout() {
-     myjson.deleteTable('flags');
+    myjson.deleteTable('flags');
     myjson.deleteTable('session');
+    myjson.deleteTable('user');
+    myjson.deleteTable('info');
+    myjson.deleteTable('instagram');
     app.quit();
 }
 
@@ -410,6 +461,8 @@ async function connectInstagramAccount() {
     myjson.updateValue('session', { "type": "instagram" }, { "username": null });
     i.driver.quit();
 }
+
+
 
 // IPC Methods
 

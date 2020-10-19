@@ -16,13 +16,23 @@ class Myjson {
 
     readValue(table, name) {
         db.getField(table, this.dbpath, name, (succ, data) => {
-            if(succ) {
+            if (succ) {
                 this.result = data[0];
             } else {
                 this.result = false;
             }
-            
         })
+        return this.result;
+    }
+
+    searchValue(table, search, where) {
+        db.search(table, this.dbpath, search, where, (succ, data) => {
+            if (succ) {
+                this.result = data;
+            } else {
+                this.result = false;
+            }
+        });
         return this.result;
     }
 
