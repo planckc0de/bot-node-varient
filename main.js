@@ -318,6 +318,7 @@ function defaultSetup() {
     myjson.createTable('user');
     myjson.createTable('info');
     myjson.createTable('instagram');
+    myjson.createTable('scrape');
 
     db.serialize(function () {
 
@@ -414,6 +415,13 @@ function defaultSetup() {
     let instagramData = {
         user: "default",
         updated: false,
+        followers: null,
+        followings: null,
+        media: null,
+        status: true
+    }
+
+    let scrapeData = {
         status: true
     }
 
@@ -442,6 +450,8 @@ function defaultSetup() {
         myjson.updateValue('info', { "status": true }, { "updated": true });
     }
 
+    myjson.deleteTable('scrape');
+    myjson.insertValue('scrape', scrapeData);
 }
 
 function userLogout() {
@@ -450,6 +460,7 @@ function userLogout() {
     myjson.deleteTable('user');
     myjson.deleteTable('info');
     myjson.deleteTable('instagram');
+    myjson.deleteTable('scrape');
     app.quit();
 }
 

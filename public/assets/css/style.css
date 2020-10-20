@@ -47,3 +47,11 @@ section div {
     object-fit: fill;
     display: block;
 }
+
+.hashtag-posts {
+    display: block;
+}
+
+.selected {
+    background: var(--primary)!important;
+}

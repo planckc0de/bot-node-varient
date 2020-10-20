@@ -7,41 +7,14 @@ const toastr = require("toastr");
 const myjsonclass = require('./util/myjson.js');
 const myjsondir = path.join(__dirname, 'database/');
 const myjson = new myjsonclass(myjsondir);
+const bot = require('planckbot');
+const qig = new bot.instagram();
 
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database(path.join(__dirname, 'database/default.db'));
 
 var userApiToken = "NODTOS8C98VEDVIJ";
 var userApiKey = "WNSdlsr0OZPzRlgl9i4YjTfhmE5vxQDceXMiPmUds0pcn4GAZRLksexIZ2xEbUE3";
-
-function checkInputs(ele) {
-    if (ele == "") {
-        return false;
-    } else {
-        return true;
-    }
-}
-
-function getInstagramUserInfo(userid) {
-
-    $.ajax({
-        type: 'GET',
-        url: 'https://api.planckstudio.in/bot/v1/getbasicinfo.php?userid=' + userid,
-        dataType: 'json',
-        success: function (responce) {
-            if (responce.status == 'success') {
-                myjson.updateValue('session', { "type": "instagram" }, { "username": responce.username });
-            }
-        },
-        error: function () {
-            console.log('Something goes wrong');
-        }
-    });
-}
-
-function connectInstagram() {
-    ipcRenderer.send('connect-instagram-signal', true);
-}
 
 $(document).ready(function () {
 

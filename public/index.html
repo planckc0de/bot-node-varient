@@ -24,7 +24,9 @@
     <link rel="stylesheet" href="assets/css/style.css">
 
     <script src="./app.js"></script>
+    <script src="./function.min.js"></script>
     <script src="./index.js"></script>
+    <script src="assets/js/jquery.min.js"></script>
 
     <title>Planck Bot</title>
 
@@ -317,6 +319,49 @@
 
                 <!-- End Profile Section -->
 
+                <!-- Users Section -->
+                <section id="sec-users" class="sec-hidden section">
+                    <h5 style="padding: 16px 0px;">Users</h5>
+                    <div class="body">
+                        <ul class="nav nav-tabs3">
+                            <li class="nav-item">
+                                <a class="nav-link " data-toggle="tab" href="#users-followings">Following</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " data-toggle="tab" href="#users-followers">Followers</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane show active" id="users-followings">
+                                <div class="row clearfix" style="margin-top: 32px;" id="render-followings"></div>
+                                <center>
+                                    <a href="#sec-users" class="sec-hidden" id="load-more-followings"
+                                        onClick="return loadMoreList('followings');">
+                                        <p style="margin-bottom: 32px;" class="btn btn-outline-secondary" type="button">
+                                            Load
+                                            More
+                                        </p>
+                                    </a>
+                                </center>
+                            </div>
+
+                            <div class="tab-pane" id="users-followers">
+                                <div class="row clearfix" style="margin-top: 32px;" id="render-followers"></div>
+                                <center>
+                                    <a href="#sec-users" class="sec-hidden" id="load-more-followers"
+                                        onClick="return loadMoreList('followers');">
+                                        <p style="margin-bottom: 32px;" class="btn btn-outline-secondary" type="button">
+                                            Load
+                                            More
+                                        </p>
+                                    </a>
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- End Users Section -->
+
                 <!-- Content Section -->
                 <section id="sec-content" class="sec-hidden section">
                     <h5 style="padding: 16px 0px;">Content</h5>
@@ -327,13 +372,48 @@
 
                     <center>
                         <a href="#sec-content" id="load-more-posts">
-                            <p style="margin-bottom: 32px;" class="btn btn-outline-secondary" type="button">Load More Posts
+                            <p style="margin-bottom: 32px;" class="btn btn-outline-secondary" type="button">Load
+                                More
+                                Posts
                             </p>
                         </a>
-
                     </center>
                 </section>
                 <!-- End Content Section-->
+
+                <!-- Scraping Section -->
+                <section id="sec-scraping" class="sec-hidden section">
+                    <h5 style="padding: 16px 0px;">Scraping</h5>
+                    <P style="padding: 0 16px;">Explore hashtag</p>
+                    <div class="row clearfix">
+                        <form name="scrape-hashtag">
+                            <div class="input-group mb-12" style="margin: 16px;">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">#</span>
+                                </div>
+                                <input type="text" class="form-control" name="hashtag" placeholder="Hashtag"
+                                    id="input-hashtag" aria-label="Username" aria-describedby="basic-addon1">
+                                <input type="number" class="form-control" name="total" value="50" placeholder="Total"
+                                    id="input-hashtag-total" aria-label="Max" aria-describedby="basic-addon1">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button"
+                                        id="btn-scraping-hashtag">Start Scraping</button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                    <div class="row clearfix" style="margin-top: 16px;" id="hashtag-posts"></div>
+                    <center>
+                        <a href="#sec-scraping" id="load-more-hashtag-posts" class="sec-hidden">
+                            <p style="margin-bottom: 32px;" class="btn btn-outline-secondary" type="button">Load
+                                More
+                                Posts
+                            </p>
+                        </a>
+                    </center>
+                </section>
+                <!-- End Scraping Section -->
 
                 <!-- Download Section-->
                 <section id="sec-download" class="sec-hidden section">

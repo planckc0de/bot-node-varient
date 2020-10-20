@@ -53,7 +53,7 @@
     "crypto-js": "^4.0.0",
     "electron-db": "^0.15.7",
     "jquery": "^3.5.1",
-    "planckbot": "^1.0.1",
+    "planckbot": "^1.0.3",
     "toastr": "^2.1.4"
   },
   "devDependencies": {
